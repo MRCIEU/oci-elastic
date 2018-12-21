@@ -17,7 +17,7 @@ variable "MasterNodeShape" {
 }
 
 variable "DataNodeShape" {
-  default = "VM.Standard2.4"
+  default = "VM.Standard2.2"
 }
 
 variable "BootVolSize" {
@@ -94,7 +94,7 @@ variable "create_timeout" {
 }
 
 variable "DataVolSize" {
-  default = "200"
+  default = "100"
 }
 
 variable "volume_attachment_attachment_type" {
