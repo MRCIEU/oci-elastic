@@ -45,15 +45,15 @@ mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.ori
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.name: ${HOSTNAME}" >>/etc/elasticsearch/elasticsearch.yml
 echo "network.host: $local_ip" >>/etc/elasticsearch/elasticsearch.yml
-echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3","$esdatanode1","$esdatanode2","$esdatanode3","$esdatanode4"]" >>/etc/elasticsearch/elasticsearch.yml
+echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
 echo "discovery.zen.minimum_master_nodes: 2" >>/etc/elasticsearch/elasticsearch.yml
 echo "cluster.routing.allocation.awareness.attributes: privad" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.attr.privad: $subnetID" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.master: true" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.data: false" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.ingest: false" >>/etc/elasticsearch/elasticsearch.yml
+echo "node.data: true" >>/etc/elasticsearch/elasticsearch.yml
+echo "node.ingest: true" >>/etc/elasticsearch/elasticsearch.yml
 echo "bootstrap.memory_lock: true" >>/etc/elasticsearch/elasticsearch.yml
 mv /etc/kibana/kibana.yml /etc/kibana/kibana.yml.original 
 echo "server.host: $local_ip" >>/etc/kibana/kibana.yml

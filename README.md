@@ -1,8 +1,20 @@
 # IEU version of the OCI Elastic Search instance.
 
+* Clone the repo and select the desired branch
 * Create a local version of env-vars, completing the fields within this file
 * Set up an API key with public key entered in the Cloud console, and the location and fingerprint added to the local env-vars file
 * The second private/public key pair are for login to cloud instances, and should be present on your system
+
+Once you've set this up you need to run ```. ./env-vars_local``` to put these into environment. You will need to run a ```terraform init``` in the directory if you haven't previously. Then run ```terraform plan```, and if that works run ```terraform apply```.
+
+**When finished**: To destroy the cluster run ```terraform destroy```. Alternatively stop the instances in the cloud console if you might re-use them.
+
+## Using the Elastic cluster
+
+Once the cluster has booted (a few minutes after Terraform has completed):
+
+* Use Kibana at http://\<BastionPublicIP\>:5601
+* SSH into opc@\<LBaaSPublicIP\> and run curl -XGET http://\<masternode_privateIP\>:9200/_cat
 
 <hr>
 
