@@ -1,3 +1,11 @@
+# IEU version of the OCI Elastic Search instance.
+
+* Create a local version of env-vars, completing the fields within this file
+* Set up an API key with public key entered in the Cloud console, and the location and fingerprint added to the local env-vars file
+* The second private/public key pair are for login to cloud instances, and should be present on your system
+
+<hr>
+
 # OCI Elasticsearch Quick Start
 
 Quick Start a Highly Available Elasticsearch Cluster on OCI. 
