@@ -13,8 +13,8 @@ Once you've set this up you need to run ```. ./env-vars_local``` to put these in
 
 Once the cluster has booted (a few minutes after Terraform has completed):
 
-* Use Kibana at http://\<BastionPublicIP\>:5601
-* SSH into opc@\<LBaaSPublicIP\> and run curl -XGET http://\<masternode_privateIP\>:9200/_cat
+* Use Kibana at http://\<LBaaSPublicIP\>:5601
+* SSH into opc@\<BastionPublicIP\> and run curl -XGET http://\<masternode_privateIP\>:9200/_cat
 
 <hr>
 
