@@ -25,12 +25,12 @@ resource "oci_core_instance" "BastionHost" {
 }
 
 resource "oci_core_instance" "ESMasterNode1" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "ESMasterNode1"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
-  
+
  create_vnic_details {
        subnet_id = "${oci_core_subnet.PrivSubnetAD1.id}"
        assign_public_ip = false
@@ -46,7 +46,7 @@ resource "oci_core_instance" "ESMasterNode1" {
     source_type = "image"
     boot_volume_size_in_gbs = "${var.BootVolSize}"
     }
-  
+
   timeouts {
    create = "${var.create_timeout}"
    }
@@ -63,7 +63,7 @@ resource "oci_core_instance" "ESMasterNode2" {
        subnet_id = "${oci_core_subnet.PrivSubnetAD2.id}"
        assign_public_ip = false
   }
- 
+
  metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
     user_data           = "${base64encode(file(var.ESBootStrap))}"
@@ -81,7 +81,7 @@ resource "oci_core_instance" "ESMasterNode2" {
 }
 
 resource "oci_core_instance" "ESMasterNode3" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[2],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "ESMasterNode3"
   shape               = "${var.MasterNodeShape}"
@@ -91,7 +91,7 @@ resource "oci_core_instance" "ESMasterNode3" {
        subnet_id = "${oci_core_subnet.PrivSubnetAD3.id}"
        assign_public_ip = false
   }
-  
+
  metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
     user_data           = "${base64encode(file(var.ESBootStrap))}"
@@ -107,4 +107,3 @@ resource "oci_core_instance" "ESMasterNode3" {
    create = "${var.create_timeout}"
    }
 }
-
