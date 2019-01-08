@@ -13,7 +13,12 @@ variable "BastionShape" {
 }
 
 variable "MasterNodeShape" {
+  //default = "VM.Standard2.2"
   default = "VM.DenseIO2.24"
+}
+
+variable "DataNodeShape" {
+  default = "VM.Standard2.2"
 }
 
 variable "BootVolSize" {

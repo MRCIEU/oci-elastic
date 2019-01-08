@@ -17,17 +17,17 @@ memgb="$((`cat /proc/meminfo |grep MemTotal|awk '{print $2}'` /1024/1024/2))"
 ##Configure Master Nodes
 MasterNodeFunc()
 {
-#IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
-#iscsiadm -m node -o new -T $IQN -p 169.254.2.2:3260
-#iscsiadm -m node -o update -T $IQN -n node.startup -v automatic
-#iscsiadm -m node -T $IQN -p 169.254.2.2:3260 -l
-#pvcreate /dev/sdb
-#vgcreate vgdata /dev/sdb
-#lvcreate -l 100%VG -n lvdata vgdata
-#mkfs.ext4 /dev/vgdata/lvdata
+IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
+iscsiadm -m node -o new -T $IQN -p 169.254.2.2:3260
+iscsiadm -m node -o update -T $IQN -n node.startup -v automatic
+iscsiadm -m node -T $IQN -p 169.254.2.2:3260 -l
+pvcreate /dev/sdb
+vgcreate vgdata /dev/sdb
+lvcreate -l 100%VG -n lvdata vgdata
+mkfs.ext4 /dev/vgdata/lvdata
 mkdir /elasticsearch
-#echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fstab
-#mount -a
+echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fstab
+mount -a
 yum install -y java
 yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.rpm
 yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-6.4.1-x86_64.rpm

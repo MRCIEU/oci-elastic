@@ -30,7 +30,7 @@ resource "oci_core_route_table" "OCI_ES_RTB" {
 
   route_rules {
     destination       = "0.0.0.0/0"
-    destination_type  = "CIDR_BLOCK"    
+    destination_type  = "CIDR_BLOCK"
     network_entity_id = "${lookup(data.oci_core_private_ips.BastionPrivateIPs.private_ips[0],"id")}"
   }
 }
@@ -136,7 +136,7 @@ resource "oci_core_security_list" "BastionSecList" {
     protocol = "6"
     source   = "0.0.0.0/0"
   },
- 
+
   {
     protocol = "all"
     source = "${var.VCN-CIDR}"
@@ -169,7 +169,7 @@ resource "oci_core_subnet" "LBSubnetAD2" {
 }
 
 resource "oci_core_subnet" "PrivSubnetAD1" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   cidr_block          = "${var.PrivSubnetAD1CIDR}"
   display_name        = "PrivateSubnetAD1"
   compartment_id      = "${var.compartment_ocid}"
@@ -195,7 +195,7 @@ resource "oci_core_subnet" "PrivSubnetAD2" {
 }
 
 resource "oci_core_subnet" "PrivSubnetAD3" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[2],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   cidr_block          = "${var.PrivSubnetAD3CIDR}"
   display_name        = "PrivateSubnetAD3"
   compartment_id      = "${var.compartment_ocid}"

@@ -1,5 +1,5 @@
 resource "oci_core_volume" "ESData1Vol1" {
-    availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
+    availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
     compartment_id = "${var.compartment_ocid}"
     size_in_gbs = "${var.DataVolSize}"
     display_name = "ESData1Vol1"
@@ -13,7 +13,7 @@ resource "oci_core_volume" "ESData2Vol2" {
  }
 
 resource "oci_core_volume" "ESData3Vol3" {
-    availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[2],"name")}"
+    availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
     compartment_id = "${var.compartment_ocid}"
     size_in_gbs = "${var.DataVolSize}"
     display_name = "ESData3Vol3"
