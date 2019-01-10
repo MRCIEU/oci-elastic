@@ -6,7 +6,7 @@ data "oci_identity_availability_domains" "ADs" {
 # Gets a list of vNIC attachments on the bastion host
 data "oci_core_vnic_attachments" "BastionVnics" {
   compartment_id      = "${var.compartment_ocid}"
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
   instance_id         = "${oci_core_instance.BastionHost.id}"
 }
 

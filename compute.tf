@@ -1,5 +1,5 @@
 resource "oci_core_instance" "BastionHost" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
   compartment_id      = "${var.compartment_ocid}"
   display_name        = "BastionHost"
   shape               = "${var.BastionShape}"
