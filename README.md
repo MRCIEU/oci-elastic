@@ -13,14 +13,14 @@ Once you've set this up you need to run ```. ./env-vars_local``` to put these in
 
 Once the cluster has booted (a few minutes after Terraform has completed):
 
-* Use Kibana at http://\<BastionPublicIP\>:5601
-* SSH into opc@\<LBaaSPublicIP\> and run curl -XGET http://\<masternode_privateIP\>:9200/_cat
+* Use Kibana at http://\<LBaaSPublicIP\>:5601 
+* SSH into opc@\<BastionPublicIP\> and run curl -XGET http://\<masternode_privateIP\>:9200/_cat
 
 <hr>
 
 # OCI Elasticsearch Quick Start
 
-Quick Start a Highly Available Elasticsearch Cluster on OCI. 
+Quick Start a Highly Available Elasticsearch Cluster on OCI.
 
 # Prerequisites
 First off you'll need to do some pre deploy setup.  That's all detailed [here](https://github.com/cloud-partners/oci-prerequisites).
@@ -42,17 +42,17 @@ OCI LBaaS is used for load balancing index operations onto the data nodes and Ki
 ![](./images/LBaaSscreen.png)
 
 ## How to Launch the Cluster.
-1. Download or clone the files to your local machine with Terraform installed 
+1. Download or clone the files to your local machine with Terraform installed
 2. Edit env-vars file and fill your OCI credentials
-3. Exceute below script to set OCI crendials in your environment 
+3. Exceute below script to set OCI crendials in your environment
 
        . ./env-vars
 
 4. Edit variables.tf and change any parameter values like VM/BM, LBaaS shape and data volume size
 5. Run below terraform commands to deploy the cluster.
-   
+
        terraform init
-       
+
 ### Sample Output of terraform init:
 
 ![](./images/TerraInit.png)
@@ -69,13 +69,13 @@ OCI LBaaS is used for load balancing index operations onto the data nodes and Ki
 
 ![](./images/TerraApply.png)
 
-Once the launch is finished use bastion public IP to access the Elasticsearch cluster nodes and use LBaaS IP address to accees 
+Once the launch is finished use bastion public IP to access the Elasticsearch cluster nodes and use LBaaS IP address to accees
 Elasticsearch and Kibana as shown below.
 
        http://<LBaaS_IP>:9200/_cat     <==== Elasticsearch URL from browser or use curl intead.
 
 ### Sample output of "curl -XGET LBaaS_IP:9200" :
-       
+
    ```
        {
          "name" : "esdatanode1",
@@ -96,18 +96,18 @@ Elasticsearch and Kibana as shown below.
        }
    ```
 
-       http://<LBaaS IP>:5601     <==== Kibana URL from browser 
-      
+       http://<LBaaS IP>:5601     <==== Kibana URL from browser
+
 ### Sample Kibana Web Page:
 
 ![](./images/KibanaScreen.png)
 
-## How to Delete the Cluster. 
+## How to Delete the Cluster.
 
 From the terraform directory where the files were downloaded to, run below command to delete the entire Cluster.
 
        terraform destroy
-       
+
 ### Sample Output of terraform destroy:
 
 ![](./images/TerraDestroy.png)
