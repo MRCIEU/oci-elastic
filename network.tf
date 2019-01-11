@@ -208,7 +208,7 @@ resource "oci_core_subnet" "PrivSubnetAD3" {
 }
 
 resource "oci_core_subnet" "BastionSubnetAD1" {
-  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[0],"name")}"
+  availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   cidr_block          = "${var.BastSubnetAD1CIDR}"
   display_name        = "BastionSubnetAD1"
   compartment_id      = "${var.compartment_ocid}"

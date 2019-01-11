@@ -98,6 +98,10 @@ variable "DataVolSize" {
   default = "100"
 }
 
+variable "NFSVolSize" {
+  default = "1024"
+}
+
 variable "volume_attachment_attachment_type" {
   default = "iscsi"
 }
