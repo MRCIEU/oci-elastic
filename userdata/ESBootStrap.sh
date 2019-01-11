@@ -38,8 +38,10 @@ mkdir -p /elasticsearch/data /elasticsearch/log
 chown -R elasticsearch:elasticsearch  /elasticsearch
 sed -i 's/\/var\/log\/elasticsearch/\/elasticsearch\/log/g' /etc/elasticsearch/jvm.options
 sed -i 's/\/var\/lib\/elasticsearch/\/elasticsearch\/data/g' /etc/elasticsearch/jvm.options
-sed -i 's/-Xmx1g/-Xmx'$memgb'g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xms1g/-Xms'$memgb'g/' /etc/elasticsearch/jvm.options
+#sed -i 's/-Xmx1g/-Xmx'$memgb'g/' /etc/elasticsearch/jvm.options
+#sed -i 's/-Xms1g/-Xms'$memgb'g/' /etc/elasticsearch/jvm.options
+sed -i 's/-Xmx1g/-Xmx31g/' /etc/elasticsearch/jvm.options
+sed -i 's/-Xms1g/-Xms31g/' /etc/elasticsearch/jvm.options
 sed -i 's/#MAX_LOCKED_MEMORY/MAX_LOCKED_MEMORY/' /etc/sysconfig/elasticsearch
 mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.original
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
