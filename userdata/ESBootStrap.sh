@@ -30,12 +30,6 @@ mkfs.ext4 /dev/vgdata/lvdata
 mkdir /elasticsearch
 echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fstab
 mount -a
-
-#mount NFS
-yum install -y nfs-common
-bastianIP=`host bastionhost.bastsub`
-#echo "$bastianIP/mnt/nfs    /mnt/nfs    xfs    defaults,noatime,_netdev,nofail" >> /etc/fstab
-
 yum install -y java
 yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.rpm
 yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-6.4.1-x86_64.rpm
@@ -80,6 +74,11 @@ firewall-offline-cmd --add-port=9300/tcp
 firewall-offline-cmd --add-port=5601/tcp
 firewall-offline-cmd --add-port=22/tcp
 systemctl restart firewalld
+
+#mount NFS
+#yum install -y nfs-common
+#bastianIP=`host bastionhost.bastsub`
+#echo "$bastianIP/mnt/nfs    /mnt/nfs    xfs    defaults,noatime,_netdev,nofail" >> /etc/fstab
 }
 
 ## Select the node as Master/Data and runs relevant function.
