@@ -105,3 +105,35 @@ variable "NFSVolSize" {
 variable "volume_attachment_attachment_type" {
   default = "iscsi"
 }
+
+variable "export_path_fs1_mt1" {
+  default = "/myfsspaths/fs1/path1"
+}
+
+variable "export_read_write_access_source" {
+  default = "10.0.0.0/8"
+}
+
+variable "export_read_only_access_source" {
+  default = "0.0.0.0/0"
+}
+
+variable "max_byte" {
+  default = 23843202333
+}
+
+variable "export_set_name_1" {
+  default = "export set for mount target 1"
+}
+
+variable "max_files" {
+  default = 223442
+}
+
+locals {
+  mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.ip_mount_target1.private_ips[0], "ip_address")}"
+ }
+
+variable "my_vcn-cidr" {
+  default = "10.0.0.0/16"
+}
