@@ -12,12 +12,12 @@ echo "elasticsearch  -  nproc  4096" >>/etc/security/limits.conf
 echo "vm.max_map_count=262144" >>/etc/sysctl.conf
 echo "vm.swappiness=1" >>/etc/sysctl.conf
 sysctl -p
-memgb="$((`cat /proc/meminfo |grep MemTotal|awk '{print $2}'` /1024/1024/2))"
+#memgb="$((`cat /proc/meminfo |grep MemTotal|awk '{print $2}'` /1024/1024/2))"
+memgb=31
 
 ##Configure Master Nodes
 MasterNodeFunc()
 {
-
 #mount block storage
 IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
 iscsiadm -m node -o new -T $IQN -p 169.254.2.2:3260
@@ -38,12 +38,8 @@ echo "[Service]" >>/etc/systemd/system/elasticsearch.service.d/override.conf
 echo "LimitMEMLOCK=infinity" >>/etc/systemd/system/elasticsearch.service.d/override.conf
 mkdir -p /elasticsearch/data /elasticsearch/log
 chown -R elasticsearch:elasticsearch  /elasticsearch
-sed -i 's/\/var\/log\/elasticsearch/\/elasticsearch\/log/g' /etc/elasticsearch/jvm.options
-sed -i 's/\/var\/lib\/elasticsearch/\/elasticsearch\/data/g' /etc/elasticsearch/jvm.options
-#sed -i 's/-Xmx1g/-Xmx'$memgb'g/' /etc/elasticsearch/jvm.options
-#sed -i 's/-Xms1g/-Xms'$memgb'g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xmx1g/-Xmx31g/' /etc/elasticsearch/jvm.options
-sed -i 's/-Xms1g/-Xms31g/' /etc/elasticsearch/jvm.options
+sed -i 's/-Xmx1g/-Xmx'$memgb'g/' /etc/elasticsearch/jvm.options
+sed -i 's/-Xms1g/-Xms'$memgb'g/' /etc/elasticsearch/jvm.options
 sed -i 's/#MAX_LOCKED_MEMORY/MAX_LOCKED_MEMORY/' /etc/sysconfig/elasticsearch
 mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.original
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
@@ -74,12 +70,12 @@ firewall-offline-cmd --add-port=9300/tcp
 firewall-offline-cmd --add-port=5601/tcp
 firewall-offline-cmd --add-port=22/tcp
 systemctl restart firewalld
+}
 
 #mount NFS
 #yum install -y nfs-common
 #bastianIP=`host bastionhost.bastsub`
 #echo "$bastianIP/mnt/nfs    /mnt/nfs    xfs    defaults,noatime,_netdev,nofail" >> /etc/fstab
-}
 
 ## Select the node as Master/Data and runs relevant function.
 case ${HOSTNAME} in
