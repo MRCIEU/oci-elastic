@@ -11,6 +11,7 @@ resource "oci_core_instance" "BastionHost" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
+	ssh_private_key     = "${var.ssh_private_key}"
     user_data           = "${base64encode(file(var.BastionBootStrap))}"
   }
 
@@ -108,6 +109,30 @@ resource "oci_core_instance" "ESMasterNode3" {
    }
 }
 
+resource "null_resource" "mount_fss_on_Bastian" {
+  depends_on = ["oci_core_instance.BastionHost",
+    "oci_file_storage_export.my_export_fs1_mt1",
+  ]
+
+  provisioner "remote-exec" {
+    connection {
+      agent       = false
+      timeout     = "15m"
+      host        = "${oci_core_instance.BastionHost.public_ip}"
+      user        = "opc"
+      private_key = "${var.ssh_private_key}"
+    }
+
+    inline = [
+      "sudo yum -y install nfs-utils > nfs-utils-install.log",
+      "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+    ]
+  }
+}
+
+#https://github.com/terraform-providers/terraform-provider-oci/issues/499
+
 resource "null_resource" "mount_fss_on_ESMasterNode1" {
   depends_on = ["oci_core_instance.ESMasterNode1",
     "oci_file_storage_export.my_export_fs1_mt1",
@@ -120,6 +145,11 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
       host        = "${oci_core_instance.ESMasterNode1.private_ip}"
       user        = "opc"
       private_key = "${var.ssh_private_key}"
+
+	  #add bastion host as intermediate hop to masternode
+	  bastion_host        = "${oci_core_instance.BastionHost.public_ip}"
+      bastion_user        = "opc"
+      bastion_private_key = "${var.ssh_private_key}"
     }
 
     inline = [
@@ -142,6 +172,11 @@ resource "null_resource" "mount_fss_on_ESMasterNode2" {
       host        = "${oci_core_instance.ESMasterNode2.private_ip}"
       user        = "opc"
       private_key = "${var.ssh_private_key}"
+
+	  #add bastion host as intermediate hop to masternode
+	  bastion_host        = "${oci_core_instance.BastionHost.public_ip}"
+	  bastion_user        = "opc"
+	  bastion_private_key = "${var.ssh_private_key}"
     }
 
     inline = [
@@ -161,9 +196,14 @@ resource "null_resource" "mount_fss_on_ESMasterNode3" {
     connection {
       agent       = false
       timeout     = "15m"
-      host        = "${oci_core_instance.ESMasterNode3.prviate_ip}"
+      host        = "${oci_core_instance.ESMasterNode3.private_ip}"
       user        = "opc"
       private_key = "${var.ssh_private_key}"
+
+	  #add bastion host as intermediate hop to masternode
+	  bastion_host        = "${oci_core_instance.BastionHost.public_ip}"
+	  bastion_user        = "opc"
+	  bastion_private_key = "${var.ssh_private_key}"
     }
 
     inline = [
