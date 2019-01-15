@@ -123,11 +123,11 @@ resource "null_resource" "mount_fss_on_Bastian" {
       private_key = "${var.ssh_private_key}"
     }
 
-	#inline = [
-    #  "sudo yum -y install nfs-utils > nfs-utils-install.log",
-    #  "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-    #  "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-    #]
+	inline = [
+      "sudo yum -y install nfs-utils > nfs-utils-install.log",
+      "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+    ]
   }
 }
 
@@ -152,11 +152,11 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
       bastion_private_key = "${var.ssh_private_key}"
     }
 
-	#inline = [
-    #  "sudo yum -y install nfs-utils > nfs-utils-install.log",
-    #  "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-    #  "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-    #]
+	inline = [
+      "sudo yum -y install nfs-utils > nfs-utils-install.log",
+      "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+    ]
   }
 }
 
@@ -179,11 +179,11 @@ resource "null_resource" "mount_fss_on_ESMasterNode2" {
 	  bastion_private_key = "${var.ssh_private_key}"
     }
 
-	#inline = [
-    #  "sudo yum -y install nfs-utils > nfs-utils-install.log",
-    #  "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-    #  "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-    #]
+	inline = [
+      "sudo yum -y install nfs-utils > nfs-utils-install.log",
+      "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+    ]
   }
 }
 
@@ -206,10 +206,10 @@ resource "null_resource" "mount_fss_on_ESMasterNode3" {
 	  bastion_private_key = "${var.ssh_private_key}"
     }
 
-    #inline = [
-    #  "sudo yum -y install nfs-utils > nfs-utils-install.log",
-    #  "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-    #  "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-    #]
+    inline = [
+      "sudo yum -y install nfs-utils > nfs-utils-install.log",
+      "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+    ]
   }
 }

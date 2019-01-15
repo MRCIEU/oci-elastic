@@ -120,7 +120,7 @@ variable "export_read_only_access_source" {
 }
 
 variable "max_byte" {
-  default = 23843202333
+  default = 2384320233300
 }
 
 variable "export_set_name_1" {

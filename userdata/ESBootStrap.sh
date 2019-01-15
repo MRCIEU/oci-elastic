@@ -44,8 +44,10 @@ mkdir /elasticsearch
 echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fstab
 mount -a
 
-echo 'sleeping'
-sleep 10
+#create snapshots directory on NFS mount
+nfs=/mnt/myfsspaths/fs1/path1
+mkdir $nfs/snapshots
+#chown elasticsearch $nfs/snapshots
 
 yum install -y java
 yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.4.0.rpm
@@ -65,6 +67,7 @@ echo "network.host: $local_ip" >>/etc/elasticsearch/elasticsearch.yml
 echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
+echo "path.repo: ['"$nfs"/snapshots']" >>/etc/elasticsearch/elasticsearch.yml
 echo "discovery.zen.minimum_master_nodes: 2" >>/etc/elasticsearch/elasticsearch.yml
 echo "cluster.routing.allocation.awareness.attributes: privad" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.attr.privad: $subnetID" >>/etc/elasticsearch/elasticsearch.yml

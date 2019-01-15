@@ -5,5 +5,5 @@ resource "oci_file_storage_export_set" "my_export_set_1" {
   # Optional
   display_name      = "${var.export_set_name_1}"
   max_fs_stat_bytes = "${var.max_byte}"
-  max_fs_stat_files = "${var.max_files}"
+  #max_fs_stat_files = "${var.max_files}"
 }
