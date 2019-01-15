@@ -111,7 +111,8 @@ variable "export_path_fs1_mt1" {
 }
 
 variable "export_read_write_access_source" {
-  default = "10.0.0.0/8"
+  #default = "10.0.0.0/8"
+  default = "192.168.0.0/28"
 }
 
 variable "export_read_only_access_source" {
@@ -135,5 +136,14 @@ locals {
  }
 
 variable "my_vcn-cidr" {
-  default = "10.0.0.0/16"
+  #default = "10.0.0.0/16"
+  default = "192.168.0.0/16"
+}
+
+#variable "my_subnet_cidr" {
+#  default = "10.0.1.0/24"
+#}
+
+variable "my_subnet_cidr" {
+  default = "192.168.0.96/28"
 }

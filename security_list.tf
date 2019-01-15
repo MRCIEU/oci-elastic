@@ -4,7 +4,7 @@
 resource "oci_core_security_list" "my_security_list" {
   compartment_id = "${var.compartment_ocid}"
   display_name   = "my_security_list"
-  vcn_id         = "${oci_core_virtual_network.my_vcn.id}"
+  vcn_id         = "${oci_core_virtual_network.OCI_ES_VCN.id}"
 
   // Allow all outbound requests
   egress_security_rules = [

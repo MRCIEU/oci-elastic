@@ -26,6 +26,10 @@ MasterNodeFunc()
 #echo $bastianIP
 #echo "$bastianIP:/mnt/nfs    /mnt/nfs    xfs    defaults,noatime,_netdev,nofail" >> /etc/fstab
 
+#mount NFS File storage
+#yum install nfs-utils
+#mkdir -p /mnt/yourmountpoint
+#mount -o nosuid,resvport 10.x.x.x:/fs-export-path /mnt/yourmountpoint
 
 #mount block storage
 IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
