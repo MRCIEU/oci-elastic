@@ -127,6 +127,7 @@ resource "null_resource" "mount_fss_on_Bastian" {
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
       "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
     ]
   }
 }
@@ -156,6 +157,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
       "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
     ]
   }
 }
@@ -183,6 +185,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode2" {
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
       "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
     ]
   }
 }
@@ -210,6 +213,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode3" {
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
       "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
     ]
   }
 }

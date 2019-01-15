@@ -45,8 +45,8 @@ echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fs
 mount -a
 
 #create snapshots directory on NFS mount
-nfs=/mnt/myfsspaths/fs1/path1
-mkdir $nfs/snapshots
+nfs='/mnt/myfsspaths/fs1/path1'
+mkdir -p $nfs/snapshots
 #chown elasticsearch $nfs/snapshots
 
 yum install -y java
