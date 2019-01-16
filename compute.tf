@@ -216,19 +216,19 @@ resource "null_resource" "mount_fss_on_ESMasterNode3" {
 }
 
 #copy data onto file storage
-resource "null_resource" remoteExecProvisionerWFolder {
-  provisioner "file" {
-  	source      = "~/.ssh/oci"
-  	destination = "~/.ssh/oci"
-	  connection {
-		agent       = false
-		timeout     = "15m"
-		host        = "${oci_core_instance.BastionHost.public_ip}"
-	    user        = "opc"
-		private_key = "${var.ssh_private_key}"
-	  }
-   }
-}
+#resource "null_resource" remoteExecProvisionerWFolder {
+#  provisioner "file" {
+#  	source      = "~/.ssh/oci"
+#  	destination = "~/.ssh/oci"
+#	  connection {
+#		agent       = false
+#		timeout     = "15m"
+#		host        = "${oci_core_instance.BastionHost.public_ip}"
+#	    user        = "opc"
+#		private_key = "${var.ssh_private_key}"
+#	  }
+#   }
+#}
 
 #copy data onto file storage
 #resource "null_resource" remoteExecProvisionerWFolder {
