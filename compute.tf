@@ -127,7 +127,7 @@ resource "null_resource" "mount_fss_on_Bastian" {
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
       "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
+	  "sudo chmod 777 /mnt/myfsspaths/fs1/path1"
     ]
   }
 }
@@ -156,8 +156,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
 	inline = [
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}"
     ]
   }
 }
@@ -184,8 +183,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode2" {
 	inline = [
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}"
     ]
   }
 }
@@ -212,8 +210,39 @@ resource "null_resource" "mount_fss_on_ESMasterNode3" {
     inline = [
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
-	  "sudo mkdir -p /mnt/myfsspaths/fs1/path1/snapshots",
+      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}"
     ]
   }
 }
+
+#copy data onto file storage
+resource "null_resource" remoteExecProvisionerWFolder {
+  provisioner "file" {
+  	source      = "~/.ssh/oci"
+  	destination = "~/.ssh/oci"
+	  connection {
+		agent       = false
+		timeout     = "15m"
+		host        = "${oci_core_instance.BastionHost.public_ip}"
+	    user        = "opc"
+		private_key = "${var.ssh_private_key}"
+	  }
+   }
+}
+
+#copy data onto file storage
+#resource "null_resource" remoteExecProvisionerWFolder {
+
+#  provisioner "file" {
+#  	source      = "test-snap"
+#  	destination = "/mnt/myfsspaths/fs1/path1/snapshots/test-snap"
+
+#	  connection {
+#		agent       = false
+#		timeout     = "15m"
+#		host        = "${oci_core_instance.BastionHost.public_ip}"
+#	    user        = "opc"
+#		private_key = "${var.ssh_private_key}"
+#	  }
+#   }
+#}

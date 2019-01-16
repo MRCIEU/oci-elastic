@@ -112,7 +112,8 @@ variable "export_path_fs1_mt1" {
 
 variable "export_read_write_access_source" {
   #default = "10.0.0.0/8"
-  default = "192.168.0.0/28"
+  #default = "192.168.0.0/28"
+  default = "0.0.0.0/0"
 }
 
 variable "export_read_only_access_source" {
