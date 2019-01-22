@@ -135,6 +135,9 @@ resource "null_resource" "mount_fss_on_Bastian" {
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499
 
 resource "null_resource" "mount_fss_on_ESMasterNode1" {
+  triggers {
+	rerun = "${uuid()}"
+  }
   depends_on = ["oci_core_instance.ESMasterNode1",
     "oci_file_storage_export.my_export_fs1_mt1",
   ]
@@ -162,6 +165,9 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
 }
 
 resource "null_resource" "mount_fss_on_ESMasterNode2" {
+ triggers {
+   rerun = "${uuid()}"
+ }
   depends_on = ["oci_core_instance.ESMasterNode2",
     "oci_file_storage_export.my_export_fs1_mt1",
   ]
@@ -189,6 +195,9 @@ resource "null_resource" "mount_fss_on_ESMasterNode2" {
 }
 
 resource "null_resource" "mount_fss_on_ESMasterNode3" {
+ triggers {
+   rerun = "${uuid()}"
+ }
   depends_on = ["oci_core_instance.ESMasterNode3",
     "oci_file_storage_export.my_export_fs1_mt1",
   ]
