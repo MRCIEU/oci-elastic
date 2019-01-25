@@ -1,4 +1,4 @@
-env-vars_local
+env-vars_local.sh
 .terraform
 .errors
 *tfstate*
