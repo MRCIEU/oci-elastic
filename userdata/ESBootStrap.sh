@@ -40,9 +40,17 @@ pvcreate /dev/sdb
 vgcreate vgdata /dev/sdb
 lvcreate -l 100%VG -n lvdata vgdata
 mkfs.ext4 /dev/vgdata/lvdata
+mkdir /elasticsearch_block
+echo "/dev/vgdata/lvdata  /elasticsearch_block  ext4  defaults,_netdev  0 0" >>/etc/fstab
+#mount -a
+
+#mount nvme
+yum install mdadm -y
+mdadm --create /dev/md0 --raid-devices=4 --level=0 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
+mdadm --detail --scan | sudo tee -a /etc/mdadm.conf >> /dev/null
+mkfs.xfs -s size=4096 -d su=262144 -d sw=6 /dev/md0
 mkdir /elasticsearch
-echo "/dev/vgdata/lvdata  /elasticsearch  ext4  defaults,_netdev  0 0" >>/etc/fstab
-mount -a
+mount /dev/md0 /elasticsearch
 
 #create snapshots directory on NFS mount
 nfs='/mnt/myfsspaths/fs1/path1'
