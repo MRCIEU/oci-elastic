@@ -127,7 +127,7 @@ resource "oci_core_volume_attachment" "Attach_ESData7Vol7" {
     volume_id = "${oci_core_volume.ESData7Vol7.id}"
 }
 
-resource "oci_core_volume_attachment" "Attach_ESData4Vol8" {
+resource "oci_core_volume_attachment" "Attach_ESData8Vol8" {
     attachment_type = "${var.volume_attachment_attachment_type}"
     instance_id = "${oci_core_instance.ESMasterNode8.id}"
     volume_id = "${oci_core_volume.ESData8Vol8.id}"
