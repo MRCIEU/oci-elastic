@@ -12,6 +12,10 @@ variable "BastionShape" {
   default = "VM.Standard2.1"
 }
 
+variable "SingleVM" {
+  default = "VM.Standard.E2.8"
+}
+
 variable "MasterNodeShape" {
   default = "VM.Standard.E2.8"
   //default = "VM.DenseIO2.24"
