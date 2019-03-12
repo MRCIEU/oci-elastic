@@ -34,7 +34,7 @@ resource "oci_core_instance" "ESMasterNode1" {
 
  create_vnic_details {
        subnet_id = "${oci_core_subnet.PrivSubnetAD1.id}"
-       assign_public_ip = false
+       #assign_public_ip = false
   }
 
   metadata {
@@ -62,7 +62,7 @@ resource "oci_core_instance" "ESMasterNode2" {
 
  create_vnic_details {
        subnet_id = "${oci_core_subnet.PrivSubnetAD2.id}"
-       assign_public_ip = false
+       #assign_public_ip = false
   }
 
  metadata {
@@ -90,7 +90,7 @@ resource "oci_core_instance" "ESMasterNode3" {
 
  create_vnic_details {
        subnet_id = "${oci_core_subnet.PrivSubnetAD3.id}"
-       assign_public_ip = false
+       #assign_public_ip = false
   }
 
  metadata {
