@@ -150,3 +150,7 @@ variable "my_vcn-cidr" {
 variable "my_subnet_cidr" {
   default = "192.168.0.96/28"
 }
+
+variable "count"{
+  default = "10"
+}
