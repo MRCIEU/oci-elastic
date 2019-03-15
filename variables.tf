@@ -38,7 +38,8 @@ variable "InstanceImageOCID" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaasez4lk2lucxcm52nslj5nhkvbvjtfies4yopwoy4b3vysg5iwjra"
     us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaa2tq67tvbeavcmioghquci6p3pvqwbneq3vfy7fe7m7geiga4cnxa"
     eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaakzrywmh7kwt7ugj5xqi5r4a7xoxsrxtc7nlsdyhmhqyp7ntobjwq"
-    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaalsdgd47nl5tgb55sihdpqmqu2sbvvccjs6tmbkr4nx2pq5gkn63a"
+    //uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaalsdgd47nl5tgb55sihdpqmqu2sbvvccjs6tmbkr4nx2pq5gkn63a"
+	uk-london-1    = "ocid1.instance.oc1.uk-london-1.abwgiljshhgx5oyajnbkv2cpvjb4rvjgcuifvxdjkbroasybxgocvps52vhq"
   }
 }
 
@@ -132,19 +133,6 @@ variable "max_files" {
   default = 223442
 }
 
-locals {
-  mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.ip_mount_target1.private_ips[0], "ip_address")}"
- }
-
-variable "my_vcn-cidr" {
-  #default = "10.0.0.0/16"
-  default = "192.168.0.0/16"
-}
-
-#variable "my_subnet_cidr" {
-#  default = "10.0.1.0/24"
-#}
-
-variable "my_subnet_cidr" {
-  default = "192.168.0.96/28"
-}
+#locals {
+#  mount_target_1_ip_address = "${lookup(data.oci_core_private_ips.ip_mount_target1.private_ips[0], "ip_address")}"
+# }

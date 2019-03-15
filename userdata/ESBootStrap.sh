@@ -1,8 +1,8 @@
 #! /bin/bash
 ##ES Master/Data Nodes boot strap
-esmasternode1=`host esmasternode1.privad1|awk '{print $4}'`
-esmasternode2=`host esmasternode2.privad2|awk '{print $4}'`
-esmasternode3=`host esmasternode3.privad3|awk '{print $4}'`
+#esmasternode1=`host esmasternode1.privad1|awk '{print $4}'`
+#esmasternode2=`host esmasternode2.privad2|awk '{print $4}'`
+#esmasternode3=`host esmasternode3.privad3|awk '{print $4}'`
 local_ip=`hostname -i`
 subnetID=`hostname -f |cut -f2 -d"."`
 ulimit -n 65536
@@ -64,7 +64,7 @@ mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.ori
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.name: ${HOSTNAME}" >>/etc/elasticsearch/elasticsearch.yml
 echo "network.host: $local_ip" >>/etc/elasticsearch/elasticsearch.yml
-echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
+#echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml

@@ -7,7 +7,7 @@ data "oci_identity_availability_domains" "ADs" {
 data "oci_core_vnic_attachments" "BastionVnics" {
   compartment_id      = "${var.compartment_ocid}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
-  instance_id         = "${oci_core_instance.BastionHost.id}"
+  instance_id         = "${oci_core_instance.ESVM.id}"
 }
 
 # Gets the OCID of the first vNIC on the bastion host
@@ -80,11 +80,11 @@ data "oci_file_storage_export_sets" "export_sets" {
   #state = "${var.export_set_state}"
 }
 
-data "oci_core_private_ips" ip_mount_target1 {
-  subnet_id = "${oci_file_storage_mount_target.my_mount_target_1.subnet_id}"
+#data "oci_core_private_ips" ip_mount_target1 {
+#  subnet_id = "${oci_file_storage_mount_target.my_mount_target_1.subnet_id}"
 
-  filter {
-    name   = "id"
-    values = ["${oci_file_storage_mount_target.my_mount_target_1.private_ip_ids.0}"]
-  }
- }
+#  filter {
+#    name   = "id"
+#    values = ["${oci_file_storage_mount_target.my_mount_target_1.private_ip_ids.0}"]
+#  }
+# }
