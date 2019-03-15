@@ -29,7 +29,7 @@ resource "oci_core_instance" "ESMasterNode" {
   count="${var.count}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "ESMasterNode[count.index]"
+  display_name        = "ESMasterNode${count.index}"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
 
