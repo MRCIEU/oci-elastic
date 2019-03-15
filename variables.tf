@@ -9,12 +9,13 @@ variable "ssh_public_key" {}
 variable "ssh_private_key" {}
 
 variable "BastionShape" {
-  default = "VM.Standard2.1"
+  //default = "VM.Standard2.1"
+  default = "VM.Standard2.24"
 }
 
 variable "MasterNodeShape" {
-  //default = "VM.Standard2.2"
-  default = "VM.DenseIO2.24"
+  default = "VM.Standard.E2.8"
+  //default = "VM.DenseIO2.24"
 }
 
 variable "DataNodeShape" {
@@ -38,7 +39,8 @@ variable "InstanceImageOCID" {
     us-phoenix-1   = "ocid1.image.oc1.phx.aaaaaaaasez4lk2lucxcm52nslj5nhkvbvjtfies4yopwoy4b3vysg5iwjra"
     us-ashburn-1   = "ocid1.image.oc1.iad.aaaaaaaa2tq67tvbeavcmioghquci6p3pvqwbneq3vfy7fe7m7geiga4cnxa"
     eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaakzrywmh7kwt7ugj5xqi5r4a7xoxsrxtc7nlsdyhmhqyp7ntobjwq"
-    uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaalsdgd47nl5tgb55sihdpqmqu2sbvvccjs6tmbkr4nx2pq5gkn63a"
+    //uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaalsdgd47nl5tgb55sihdpqmqu2sbvvccjs6tmbkr4nx2pq5gkn63a"
+	uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaarruepdlahln5fah4lvm7tsf4was3wdx75vfs6vljdke65imbqnhq"
   }
 }
 
