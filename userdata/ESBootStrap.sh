@@ -3,6 +3,13 @@
 esmasternode1=`host esmasternode1.privad1|awk '{print $4}'`
 esmasternode2=`host esmasternode2.privad2|awk '{print $4}'`
 esmasternode3=`host esmasternode3.privad3|awk '{print $4}'`
+esmasternode4=`host esmasternode4.privad3|awk '{print $4}'`
+esmasternode5=`host esmasternode5.privad3|awk '{print $4}'`
+esmasternode6=`host esmasternode6.privad3|awk '{print $4}'`
+esmasternode7=`host esmasternode7.privad3|awk '{print $4}'`
+esmasternode8=`host esmasternode8.privad3|awk '{print $4}'`
+esmasternode9=`host esmasternode9.privad3|awk '{print $4}'`
+esmasternode10=`host esmasternode10.privad3|awk '{print $4}'`
 local_ip=`hostname -i`
 subnetID=`hostname -f |cut -f2 -d"."`
 ulimit -n 65536
@@ -64,7 +71,7 @@ mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.ori
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.name: ${HOSTNAME}" >>/etc/elasticsearch/elasticsearch.yml
 echo "network.host: $local_ip" >>/etc/elasticsearch/elasticsearch.yml
-echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
+echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3","$esmasternode4","$esmasternode5","$esmasternode6","$esmasternode7","$esmasternode8","$esmasternode9","$esmasternode10"]" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml
@@ -94,7 +101,7 @@ systemctl restart firewalld
 
 ## Select the node as Master/Data and runs relevant function.
 case ${HOSTNAME} in
-     esmasternode1|esmasternode2|esmasternode3)
+     esmasternode1|esmasternode2|esmasternode3|esmasternode4|esmasternode5|esmasternode6|esmasternode7|esmasternode8|esmasternode9|esmasternode10)
            echo "Running Master Node Function"
            MasterNodeFunc
            ;;
