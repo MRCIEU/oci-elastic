@@ -15,13 +15,15 @@
 
 #### block storage on master nodes
 
-resource "oci_core_volume" "ESData1Vol1" {
+resource "oci_core_volume" "ESDataVol" {
+	count="${var.count}"
     availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
     compartment_id = "${var.compartment_ocid}"
     size_in_gbs = "${var.DataVolSize}"
-    display_name = "ESData1Vol1"
+    display_name = "ESDataVol${count.index}"
  }
 
+<<<<<<< HEAD
 resource "oci_core_volume" "ESData2Vol2" {
     availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
     compartment_id = "${var.compartment_ocid}"
@@ -98,9 +100,13 @@ resource "oci_core_volume_attachment" "Attach_ESData2Vol2" {
 }
 
 resource "oci_core_volume_attachment" "Attach_ESData3Vol3" {
+=======
+resource "oci_core_volume_attachment" "Attach_ESDataVol" {
+	count="${var.count}"
+>>>>>>> 2083b6aaffb72daaf90ef4dd83c5fc54716783a9
     attachment_type = "${var.volume_attachment_attachment_type}"
-    instance_id = "${oci_core_instance.ESMasterNode3.id}"
-    volume_id = "${oci_core_volume.ESData3Vol3.id}"
+    instance_id = "${oci_core_instance.ESMasterNode.*.id[count.index]}"
+    volume_id = "${oci_core_volume.ESDataVol.*.id[count.index]}"
 }
 
 resource "oci_core_volume_attachment" "Attach_ESData4Vol4" {

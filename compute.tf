@@ -25,10 +25,11 @@ resource "oci_core_instance" "BastionHost" {
    }
 }
 
-resource "oci_core_instance" "ESMasterNode1" {
+resource "oci_core_instance" "ESMasterNode" {
+  count="${var.count}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "ESMasterNode1"
+  display_name        = "ESMasterNode${count.index}"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
 
@@ -330,11 +331,12 @@ resource "null_resource" "mount_fss_on_Bastian" {
 
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499
 
-resource "null_resource" "mount_fss_on_ESMasterNode1" {
+resource "null_resource" "mount_fss_on_ESMasterNode" {
+  count = "${var.count}"
   #triggers {
   #	rerun = "${uuid()}"
   #}
-  depends_on = ["oci_core_instance.ESMasterNode1",
+  depends_on = ["oci_core_instance.ESMasterNode",
     "oci_file_storage_export.my_export_fs1_mt1",
   ]
 
@@ -342,7 +344,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode1" {
     connection {
       agent       = false
       timeout     = "15m"
-      host        = "${oci_core_instance.ESMasterNode1.private_ip}"
+      host        = "${oci_core_instance.ESMasterNode.*.private_ip[count.index]}"
       user        = "opc"
       private_key = "${var.ssh_private_key}"
 
