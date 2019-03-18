@@ -5,6 +5,7 @@ echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 ##ES Master/Data Nodes boot strap
 #make array of ES Nodes
 VM_COUNT=10
+min_nodes=$((($VM_COUNT/2)+1))
 hostArray=()
 for ((i=0; i<$VM_COUNT; i++)); do
 	esmasternode=`host esmasternode$i.privad1|awk '{print $4}'`
@@ -91,7 +92,7 @@ echo "discovery.zen.ping.unicast.hosts: [$hostString]" >>/etc/elasticsearch/elas
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml
-echo "discovery.zen.minimum_master_nodes: 2" >>/etc/elasticsearch/elasticsearch.yml
+echo "discovery.zen.minimum_master_nodes: $min_nodes" >>/etc/elasticsearch/elasticsearch.yml
 echo "cluster.routing.allocation.awareness.attributes: privad" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.attr.privad: $subnetID" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.master: true" >>/etc/elasticsearch/elasticsearch.yml
