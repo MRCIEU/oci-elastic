@@ -152,5 +152,5 @@ variable "my_subnet_cidr" {
 }
 
 variable "count"{
-  default = "1"
+  default = "10"
 }

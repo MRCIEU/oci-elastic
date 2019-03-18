@@ -1,9 +1,30 @@
 #! /bin/bash
+
+echo 'Running ESBootStrap.sh' >> /tmp/oci.log
+
 ##ES Master/Data Nodes boot strap
+#make array of ES Nodes
+VM_COUNT=10
+hostArray=()
+for ((i=0; i<$VM_COUNT; i++)); do
+	esmasternode=`host esmasternode$i.privad1|awk '{print $4}'`
+	echo $esmasternode >> /tmp/oci.log;
+	hostArray+=( $esmasternode );
+done
+echo ${hostArray[@]} >> /tmp/oci.log
+
+#make string for elasticsearch config
+join () {
+  local IFS="$1"
+  shift
+  echo "$*"
+}
+hostString=`join , "${hostArray[@]}"`
+echo $hostString >> /tmp/oci.log
+
 #esmasternode1=`host esmasternode1.privad1|awk '{print $4}'`
 #esmasternode2=`host esmasternode2.privad2|awk '{print $4}'`
 #esmasternode3=`host esmasternode3.privad3|awk '{print $4}'`
-echo 'Running ESBootStrap.sh'
 local_ip=`hostname -i`
 subnetID=`hostname -f |cut -f2 -d"."`
 ulimit -n 65536
@@ -19,6 +40,7 @@ memgb=31
 ##Configure Master Nodes
 MasterNodeFunc()
 {
+echo "Running MasterNodeFunc" echo >> /tmp/oci.log
 #mount NFS
 #yum install -y nfs-common
 #bastianIP=`host bastionhost.bastsub|awk '{print $4}'`
@@ -65,7 +87,7 @@ mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml.ori
 echo "cluster.name: oci-es-cluster" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.name: ${HOSTNAME}" >>/etc/elasticsearch/elasticsearch.yml
 echo "network.host: $local_ip" >>/etc/elasticsearch/elasticsearch.yml
-#echo "discovery.zen.ping.unicast.hosts: ["$esmasternode1","$esmasternode2","$esmasternode3"]" >>/etc/elasticsearch/elasticsearch.yml
+echo "discovery.zen.ping.unicast.hosts: [$hostString]" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.data: /elasticsearch/data" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.logs: /elasticsearch/log" >>/etc/elasticsearch/elasticsearch.yml
 echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml
@@ -94,14 +116,21 @@ systemctl restart firewalld
 }
 
 ## Select the node as Master/Data and runs relevant function.
-case ${HOSTNAME} in
-     esmasternode1|esmasternode2|esmasternode3)
-           echo "Running Master Node Function"
-           MasterNodeFunc
-           ;;
-    esdatanode1|esdatanode2|esdatanode3|esdatanode4)
-           echo "Running Data Node Function"
-           DataNodeFunc
-           ;;
-       *)
-esac
+#for i in "${hostArray[@]}"; do
+#	if [ "$i" == ${HOSTNAME} ]; then
+#		echo "found ${HOSTNAME}";
+MasterNodeFunc
+#	fi;
+#done
+
+#case ${HOSTNAME} in
+#     esmasternode1|esmasternode2|esmasternode3)
+#           echo "Running Master Node Function"
+#           MasterNodeFunc
+#           ;;
+#    esdatanode1|esdatanode2|esdatanode3|esdatanode4)
+#           echo "Running Data Node Function"
+#           DataNodeFunc
+#           ;;
+#       *)
+#esac
