@@ -41,7 +41,7 @@ memgb=31
 ##Configure Master Nodes
 MasterNodeFunc()
 {
-echo "Running MasterNodeFunc" echo >> /tmp/oci.log
+echo "Running MasterNodeFunc" >> /tmp/oci.log
 #mount NFS
 #yum install -y nfs-common
 #bastianIP=`host bastionhost.bastsub|awk '{print $4}'`
@@ -56,7 +56,9 @@ echo "Running MasterNodeFunc" echo >> /tmp/oci.log
 #mount -o nosuid,resvport 10.x.x.x:/fs-export-path /mnt/yourmountpoint
 
 #mount block storage
+echo "Mounting block storage" >> /tmp/oci.log
 IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
+echo "IQN: $IQN" >> /tmp/oci.log
 iscsiadm -m node -o new -T $IQN -p 169.254.2.2:3260
 iscsiadm -m node -o update -T $IQN -n node.startup -v automatic
 iscsiadm -m node -T $IQN -p 169.254.2.2:3260 -l

@@ -9,8 +9,8 @@ variable "ssh_public_key" {}
 variable "ssh_private_key" {}
 
 variable "BastionShape" {
-  //default = "VM.Standard2.1"
-  default = "VM.Standard2.24"
+  default = "VM.Standard2.1"
+  //default = "VM.Standard2.24"
 }
 
 variable "MasterNodeShape" {
