@@ -97,11 +97,11 @@ variable "create_timeout" {
 }
 
 variable "DataVolSize" {
-  default = "3000"
+  default = "6500"
 }
 
 variable "NFSVolSize" {
-  default = "1024"
+  default = "10240"
 }
 
 variable "volume_attachment_attachment_type" {

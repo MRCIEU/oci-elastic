@@ -56,6 +56,8 @@ echo "Running MasterNodeFunc" >> /tmp/oci.log
 #mount -o nosuid,resvport 10.x.x.x:/fs-export-path /mnt/yourmountpoint
 
 #mount block storage
+#sleep for a bit to avoid issues here
+sleep 60
 echo "Mounting block storage" >> /tmp/oci.log
 IQN=$(iscsiadm -m discovery -t st -p 169.254.2.2:3260 |awk '{print $2}')
 echo "IQN: $IQN" >> /tmp/oci.log
