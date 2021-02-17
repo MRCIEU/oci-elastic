@@ -42,14 +42,15 @@ def read_logs(log_file):
             #print(gwas_id,index_count)
             index_name = "-".join(gwas_id.split('-')[0:2])
             gwas_name = gwas_id.split('-')[3].replace('.log','')
-            res = gwas_count(gwas_id=gwas_name,index_name=index_name)
-            try:
-                if int(index_count) != int(res['hits']['total']):
-                    print('Error',index_name,gwas_name,index_count,res['hits']['total'])      
-                else:
-                    print('Good',index_name,gwas_name,index_count,res['hits']['total'])    
-            except:
-                  print('Error',index_name,gwas_name,index_count,res['hits']['total'])   
+            if not index_name.startswith('eqtl'):
+                res = gwas_count(gwas_id=gwas_name,index_name=index_name)
+                try:
+                    if int(index_count) != int(res['hits']['total']):
+                        print('Error',index_name,gwas_name,index_count,res['hits']['total'])      
+                    else:
+                        print('Good',index_name,gwas_name,index_count,res['hits']['total'])    
+                except:
+                    print('Error',index_name,gwas_name,index_count,res['hits']['total'])   
 
 if __name__ == '__main__':
     read_logs(config.log_file)
