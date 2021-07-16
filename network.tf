@@ -52,7 +52,7 @@ resource "oci_core_security_list" "LBSecList" {
     }
 
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "137.222.4.102/32"
   },
     {
       tcp_options {
@@ -61,7 +61,7 @@ resource "oci_core_security_list" "LBSecList" {
       }
 
       protocol = "6"
-      source   = "0.0.0.0/0"
+      source   = "137.222.4.102/32"
     },
   ]
 }
@@ -141,6 +141,16 @@ resource "oci_core_security_list" "BastionSecList" {
     protocol = "all"
     source = "${var.VCN-CIDR}"
    },
+
+   {
+     tcp_options {
+       "max" = 9200
+       "min" = 9400
+     }
+
+     protocol = "6"
+     source   = "137.222.0.0/16"
+   }
   ]
 }
 

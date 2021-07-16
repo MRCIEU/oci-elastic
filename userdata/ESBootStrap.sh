@@ -8,7 +8,7 @@ VM_COUNT=10
 min_nodes=$((($VM_COUNT/2)+1))
 hostArray=()
 for ((i=0; i<$VM_COUNT; i++)); do
-	esmasternode=`host esmasternode$i.privad1|awk '{print $4}'`
+	esmasternode=`host esmasternodev3$i.privad1|awk '{print $4}'`
 	echo $esmasternode >> /tmp/oci.log;
 	hostArray+=( $esmasternode );
 done
