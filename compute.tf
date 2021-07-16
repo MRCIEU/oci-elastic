@@ -1,7 +1,7 @@
 resource "oci_core_instance" "BastionHost" {
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "BastionHost"
+  display_name        = "BastionHostv3"
   shape               = "${var.BastionShape}"
 
   create_vnic_details {
@@ -29,7 +29,7 @@ resource "oci_core_instance" "ESMasterNode" {
   count="${var.count}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "ESMasterNode${count.index}"
+  display_name        = "ESMasterNodev3${count.index}"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
 
