@@ -78,8 +78,8 @@ mkdir -p $nfs
 #chown elasticsearch $nfs/snapshots
 
 yum install -y java
-yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.17.rpm
-yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-6.8.17-x86_64.rpm
+yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.4-x86_64.rpm
+yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-7.13.4-x86_64.rpm
 mkdir /etc/systemd/system/elasticsearch.service.d
 echo "[Service]" >>/etc/systemd/system/elasticsearch.service.d/override.conf
 echo "LimitMEMLOCK=infinity" >>/etc/systemd/system/elasticsearch.service.d/override.conf

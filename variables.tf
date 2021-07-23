@@ -96,7 +96,7 @@ variable "create_timeout" {
 }
 
 variable "DataVolSize" {
-  default = "50"
+  default = "4500"
 }
 
 variable "NFSVolSize" {
