@@ -16,16 +16,16 @@
 #### block storage on master nodes
 
 resource "oci_core_volume" "ESDataVol" {
-	nodecount="${var.nodecount}"
+	count="${var.count}"
     availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
     compartment_id = "${var.compartment_ocid}"
     size_in_gbs = "${var.DataVolSize}"
-    display_name = "ESDataVol${nodecount.index}"
+    display_name = "ESDataVol${count.index}"
  }
 
 resource "oci_core_volume_attachment" "Attach_ESDataVol" {
-	nodecount="${var.nodecount}"
+	count="${var.count}"
     attachment_type = "${var.volume_attachment_attachment_type}"
-    instance_id = "${oci_core_instance.ESMasterNode.*.id[nodecount.index]}"
-    volume_id = "${oci_core_volume.ESDataVol.*.id[nodecount.index]}"
+    instance_id = "${oci_core_instance.ESMasterNode.*.id[count.index]}"
+    volume_id = "${oci_core_volume.ESDataVol.*.id[count.index]}"
 }

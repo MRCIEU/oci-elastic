@@ -21,7 +21,7 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = "6"
       source   = "${var.my_vcn-cidr}"
 
-      tcp_options = {
+      tcp_options {
         "min" = 2048
         "max" = 2050
       }
@@ -30,8 +30,8 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = "6"
       source   = "${var.my_vcn-cidr}"
 
-      tcp_options = {
-        source_port_range = {
+      tcp_options {
+        source_port_range {
           "min" = 2048
           "max" = 2050
         }
@@ -41,7 +41,7 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = "6"
       source   = "${var.my_vcn-cidr}"
 
-      tcp_options = {
+      tcp_options {
         "min" = 111
         "max" = 111
       }
@@ -51,7 +51,7 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = "6"
       source   = "0.0.0.0/0"
 
-      tcp_options = {
+      tcp_options {
         "min" = 22
         "max" = 22
       }
@@ -61,7 +61,7 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = 1
       source   = "0.0.0.0/0"
 
-      icmp_options = {
+      icmp_options {
         "type" = 3
         "code" = 4
       }
@@ -71,7 +71,7 @@ resource "oci_core_security_list" "my_security_list" {
       protocol = 1
       source   = "${var.my_vcn-cidr}"
 
-      icmp_options = {
+      icmp_options {
         "type" = 3
       }
     },
