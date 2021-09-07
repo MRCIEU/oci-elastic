@@ -40,18 +40,18 @@ resource "oci_load_balancer_backend_set" "ES-Data" {
 }
 
 resource "oci_load_balancer_backend" "DataNode" {
-	count = "${var.count}"
+	nodecount = "${var.nodecount}"
     backendset_name = "ES-Data"
-	ip_address = "${oci_core_instance.ESMasterNode.*.private_ip[count.index]}"
+	ip_address = "${oci_core_instance.ESMasterNode.*.private_ip[nodecount.index]}"
     load_balancer_id = "${oci_load_balancer_load_balancer.ES-LB.id}"
     port = "${var.ESDataPort}"
     depends_on = ["oci_load_balancer_backend_set.ES-Data"]
     }
 
 resource "oci_load_balancer_backend" "ESMaster" {
-	count = "${var.count}"
+	nodecount = "${var.nodecount}"
     backendset_name = "ESKibana"
-    ip_address = "${oci_core_instance.ESMasterNode.*.private_ip[count.index]}"
+    ip_address = "${oci_core_instance.ESMasterNode.*.private_ip[nodecount.index]}"
     load_balancer_id = "${oci_load_balancer_load_balancer.ES-LB.id}"
     port = "${var.KibanaPort}"
     depends_on = ["oci_load_balancer_backend_set.ESKibana"]

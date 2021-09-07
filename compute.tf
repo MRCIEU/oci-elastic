@@ -26,10 +26,10 @@ resource "oci_core_instance" "BastionHost" {
 }
 
 resource "oci_core_instance" "ESMasterNode" {
-  count="${var.count}"
+  nodecount="${var.nodecount}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "ESMasterNodev3${count.index}"
+  display_name        = "ESMasterNodev3${nodecount.index}"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
 
@@ -71,7 +71,7 @@ resource "null_resource" "mount_fss_on_Bastian" {
 	inline = [
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
+      #"sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}",
 	  "sudo chmod 777 /mnt/myfsspaths/fs1/path1"
     ]
   }
@@ -80,7 +80,7 @@ resource "null_resource" "mount_fss_on_Bastian" {
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499
 
 resource "null_resource" "mount_fss_on_ESMasterNode" {
-  count = "${var.count}"
+  nodecount = "${var.nodecount}"
   #triggers {
   #	rerun = "${uuid()}"
   #}
@@ -105,7 +105,7 @@ resource "null_resource" "mount_fss_on_ESMasterNode" {
 	inline = [
       "sudo yum -y install nfs-utils > nfs-utils-install.log",
       "sudo mkdir -p /mnt/myfsspaths/fs1/path1",
-      "sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}"
+      #"sudo mount ${local.mount_target_1_ip_address}:${var.export_path_fs1_mt1} /mnt${var.export_path_fs1_mt1}"
     ]
   }
 }

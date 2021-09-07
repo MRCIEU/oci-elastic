@@ -31,7 +31,7 @@ variable "lb_shape" {
 }
 
 variable "InstanceImageOCID" {
-  type = "map"
+  type = map(string)
 
   default = {
     // See https://docs.us-phoenix-1.oraclecloud.com/images/
@@ -143,6 +143,6 @@ variable "my_subnet_cidr" {
   default = "192.168.0.96/28"
 }
 
-variable "count"{
+variable "nodecount"{
   default = "10"
 }

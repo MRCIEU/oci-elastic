@@ -46,7 +46,7 @@ resource "oci_core_security_list" "LBSecList" {
   }]
 
   ingress_security_rules = [{
-    tcp_options {
+    tcp_options = {
       "max" = 9200
       "min" = 9200
     }
@@ -55,7 +55,7 @@ resource "oci_core_security_list" "LBSecList" {
     source   = "137.222.4.102/32"
   },
     {
-      tcp_options {
+      tcp_options = {
         "max" = 5601
         "min" = 5601
       }
@@ -77,7 +77,7 @@ resource "oci_core_security_list" "PrivSecList" {
   }]
 
   ingress_security_rules = [{
-    tcp_options {
+    tcp_options = {
       "max" = 9200
       "min" = 9200
     }
@@ -86,7 +86,7 @@ resource "oci_core_security_list" "PrivSecList" {
     source   = "${var.VCN-CIDR}"
   },
   {
-    tcp_options {
+    tcp_options = {
       "max" = 9300
       "min" = 9300
     }
@@ -96,7 +96,7 @@ resource "oci_core_security_list" "PrivSecList" {
   },
 
   {
-      tcp_options {
+      tcp_options = {
         "max" = 5601
         "min" = 5601
       }
@@ -106,7 +106,7 @@ resource "oci_core_security_list" "PrivSecList" {
     },
 
     {
-      tcp_options {
+      tcp_options = {
         "max" = 22
         "min" = 22
       }
@@ -128,7 +128,7 @@ resource "oci_core_security_list" "BastionSecList" {
   }]
 
   ingress_security_rules = [{
-    tcp_options {
+    tcp_options = {
       "max" = 22
       "min" = 22
     }
@@ -228,7 +228,6 @@ resource "oci_core_virtual_network" "my_vcn" {
   dns_label      = "myvcn"
   compartment_id = "${var.compartment_ocid}"
   display_name   = "myvcn"
-  dns_label      = "myvcn"
 }
 
 resource "oci_core_internet_gateway" "my_internet_gateway" {
