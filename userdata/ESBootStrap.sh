@@ -2,13 +2,15 @@
 
 echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 
+nodeprefix="esmasternodev3"
+
 ##ES Master/Data Nodes boot strap
 #make array of ES Nodes
 VM_COUNT=10
 min_nodes=$((($VM_COUNT/2)+1))
 hostArray=()
 for ((i=0; i<$VM_COUNT; i++)); do
-	esmasternode=`host esmasternodev3$i.privad1|awk '{print $4}'`
+	esmasternode=`host ${nodeprefix}${i}.privad1|awk '{print $4}'`
 	echo $esmasternode >> /tmp/oci.log;
 	hostArray+=( $esmasternode );
 done
@@ -99,9 +101,11 @@ echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml
 echo "discovery.zen.minimum_master_nodes: $min_nodes" >>/etc/elasticsearch/elasticsearch.yml
 echo "cluster.routing.allocation.awareness.attributes: privad" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.attr.privad: $subnetID" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.master: true" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.data: true" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.ingest: true" >>/etc/elasticsearch/elasticsearch.yml
+echo "node.roles: [ data, master ]" >>/etc/elasticsearch/elasticsearch.yml
+echo "cluster.initial_master_nodes:"  >>/etc/elasticsearch/elasticsearch.yml
+for ((i=0; i<$VM_COUNT; i++)); do
+	echo "  - ${nodeprefix}${i}"  >>/etc/elasticsearch/elasticsearch.yml
+done
 echo "bootstrap.memory_lock: true" >>/etc/elasticsearch/elasticsearch.yml
 mv /etc/kibana/kibana.yml /etc/kibana/kibana.yml.original
 echo "server.host: $local_ip" >>/etc/kibana/kibana.yml

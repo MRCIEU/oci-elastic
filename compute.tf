@@ -75,6 +75,11 @@ resource "null_resource" "mount_fss_on_Bastian" {
 	  "sudo chmod 777 /mnt/myfsspaths/fs1/path1"
     ]
   }
+
+    provisioner "file" {
+    source      = "oci/"
+    destination = "/home/opc/oci"
+  }
 }
 
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499
