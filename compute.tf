@@ -11,7 +11,7 @@ resource "oci_core_instance" "BastionHost" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-	ssh_private_key     = "${var.ssh_private_key}"
+	  ssh_private_key     = "${var.ssh_private_key}"
     user_data           = "${base64encode(file(var.BastionBootStrap))}"
   }
 
@@ -53,9 +53,9 @@ resource "oci_core_instance" "ESMasterNode" {
    create = "${var.create_timeout}"
    }
 
-       provisioner "file" {
+  provisioner "file" {
     source      = "oci/"
-    destination = "/home/opc/oci"
+    destination = "/home/opc"
   }
 }
 

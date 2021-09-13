@@ -5,6 +5,8 @@ echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 nodeprefix="esmasternodev3"
 VM_COUNT=12
 
+sleep 5m
+
 ##ES Master/Data Nodes boot strap
 #make array of ES Nodes
 min_nodes=$((($VM_COUNT/2)+1))
@@ -124,22 +126,11 @@ firewall-offline-cmd --add-port=22/tcp
 systemctl restart firewalld
 }
 
-## Select the node as Master/Data and runs relevant function.
-#for i in "${hostArray[@]}"; do
-#	if [ "$i" == ${HOSTNAME} ]; then
-#		echo "found ${HOSTNAME}";
 MasterNodeFunc
-#	fi;
-#done
 
-#case ${HOSTNAME} in
-#     esmasternode1|esmasternode2|esmasternode3)
-#           echo "Running Master Node Function"
-#           MasterNodeFunc
-#           ;;
-#    esdatanode1|esdatanode2|esdatanode3|esdatanode4)
-#           echo "Running Data Node Function"
-#           DataNodeFunc
-#           ;;
-#       *)
-#esac
+# Add the oci command line client
+yum install -y python36-oci-cli
+mkdir .oci
+cp oci_api_key* oci/
+cp config .oci/
+chmod 700 .oci oci-api-*
