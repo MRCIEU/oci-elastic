@@ -96,7 +96,7 @@ variable "create_timeout" {
 }
 
 variable "DataVolSize" {
-  default = "4500"
+  default = "6075"
 }
 
 variable "NFSVolSize" {
@@ -144,5 +144,5 @@ variable "my_subnet_cidr" {
 }
 
 variable "count"{
-  default = "12"
+  default = "10"
 }

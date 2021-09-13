@@ -3,7 +3,7 @@
 echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 
 nodeprefix="esmasternodev3"
-VM_COUNT=12
+VM_COUNT=10
 
 sleep 5m
 
