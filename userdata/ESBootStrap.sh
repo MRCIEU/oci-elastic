@@ -3,10 +3,10 @@
 echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 
 nodeprefix="esmasternodev3"
+VM_COUNT=12
 
 ##ES Master/Data Nodes boot strap
 #make array of ES Nodes
-VM_COUNT=10
 min_nodes=$((($VM_COUNT/2)+1))
 hostArray=()
 for ((i=0; i<$VM_COUNT; i++)); do

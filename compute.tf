@@ -52,6 +52,11 @@ resource "oci_core_instance" "ESMasterNode" {
   timeouts {
    create = "${var.create_timeout}"
    }
+
+       provisioner "file" {
+    source      = "oci/"
+    destination = "/home/opc/oci"
+  }
 }
 
 resource "null_resource" "mount_fss_on_Bastian" {
@@ -76,10 +81,7 @@ resource "null_resource" "mount_fss_on_Bastian" {
     ]
   }
 
-    provisioner "file" {
-    source      = "oci/"
-    destination = "/home/opc/oci"
-  }
+
 }
 
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499
