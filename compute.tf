@@ -53,10 +53,10 @@ resource "oci_core_instance" "ESMasterNode" {
    create = "${var.create_timeout}"
    }
 
-  provisioner "file" {
-    source      = "oci/"
-    destination = "/home/opc"
-  }
+ # provisioner "file" {
+ #   source      = "oci/"
+ #   destination = "/home/opc"
+ # }
 }
 
 resource "null_resource" "mount_fss_on_Bastian" {

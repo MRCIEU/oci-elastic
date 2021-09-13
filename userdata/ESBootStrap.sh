@@ -131,6 +131,6 @@ MasterNodeFunc
 # Add the oci command line client
 yum install -y python36-oci-cli
 mkdir .oci
-cp oci_api_key* oci/
-cp config .oci/
-chmod 700 .oci oci-api-*
+#cp oci_api_key* oci/
+#cp config .oci/
+#chmod 700 .oci oci-api-*

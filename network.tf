@@ -228,7 +228,6 @@ resource "oci_core_virtual_network" "my_vcn" {
   dns_label      = "myvcn"
   compartment_id = "${var.compartment_ocid}"
   display_name   = "myvcn"
-  dns_label      = "myvcn"
 }
 
 resource "oci_core_internet_gateway" "my_internet_gateway" {

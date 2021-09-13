@@ -36,3 +36,7 @@ firewall-offline-cmd --direct --add-rule ipv4 filter FORWARD 0 -i ens3 -j ACCEPT
 sysctl -p
 
 systemctl restart firewalld
+mkdir /home/opc/bin
+for i in {0..11}; do echo '#!/bin/bash' > /home/opc/bin/node${i}; echo "ssh esmasternodev3${i}.privad1.ociesvcn.oraclevcn.com" >> /home/opc/bin/node${i}; done
+chown opc /home/opc/bin/*
+chmod 700 /home/opc/bin/*
