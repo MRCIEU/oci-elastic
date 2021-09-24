@@ -1,7 +1,5 @@
 url='localhost'
 port='9300'
-#url='192.168.0.20'
-#url='140.238.83.192'
 
 #curl -XGET $url':9200/_cat/indices/ukb-b*' | sort -k3
 
