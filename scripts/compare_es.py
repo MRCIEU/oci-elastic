@@ -157,10 +157,13 @@ def es_query(bodyText,host,index=index_name):
     total = 0
     #print(res['responses'])
     # v6 and v7 ES return total in different format
-    try:
-        total += int(res['hits']['total']['value'])
-    except:
-        total += int(res['hits']['total'])
+    # actually, total is not always reliable, best to actually count
+    # https://www.elastic.co/guide/en/elasticsearch/reference/master/search-your-data.html#track-total-hits
+    total = len(res['hits']['hits'])
+    #try:
+    #    total += int(res['hits']['total']['value'])
+    #except:
+    #    total += int(res['hits']['total'])
     return t, total, res 
 
 def es_mquery(host,body):
@@ -175,10 +178,13 @@ def es_mquery(host,body):
     for r in res['responses']:
         #print(res['responses'])
         # v6 and v7 ES return total in different format
-        try:
-            total += int(r['hits']['total']['value'])
-        except:
-            total += int(r['hits']['total'])
+        # actually, total is not always reliable, best to actually count
+        # https://www.elastic.co/guide/en/elasticsearch/reference/master/search-your-data.html#track-total-hits
+        total += len(r['hits']['hits'])
+        #try:
+        #    total += int(r['hits']['total']['value'])
+        #except:
+        #   total += int(r['hits']['total'])
     return t, total
 
 def et1(host):
@@ -242,6 +248,7 @@ def et3(host):
 			{"range": {'position': {'gte': q3_start, 'lte': q3_end}}}
 			]
     bodyText={
+        #"track_total_hits": True,
         "size":return_limit,
         "query": {
             "bool" : {
@@ -249,9 +256,11 @@ def et3(host):
             }
         }
     }
-    #print(filterData)
+    print(filterData)
     es = es_connection(host['host'],host['port'],host['name'])
     t, total, res = es_query(host=host,bodyText=bodyText)
+    # check if res actually contains all hits
+    print('et3',total,len(res['hits']['hits']))
     return t,total
 
 def run_tests(logger,name=0,db_type='',host=''):
@@ -279,13 +288,13 @@ def single():
         q2_snpList=random.sample(random_snps, 1)
 
         # q3 
-        q3_chr=random.randrange(1, 22)
+        q3_chr=str(random.randrange(1, 22))
         q3_start=random.randrange(10000000, 20000000)
         q3_end=q3_start+range_size
 
         for h in es_hosts:
             #run_tests(logger=logger1,db_type='oa')
-            run_tests(logger=logger1,name=f's{run_num}',db_type='es',host=h)
+            run_tests(logger=logger1,name=f's{i}:{run_num}',db_type='es',host=h)
 
 
 
