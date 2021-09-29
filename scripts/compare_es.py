@@ -75,7 +75,7 @@ es_hosts = [
 
 #elasticsearch connection
 def es_connection(host=config.elastic_host1,port=config.elastic_port1,name=config.elastic_name1):
-    print('Testing Elasticsearch connection',host,port,name)
+    print('Connecting to',host,port,name)
     try:
         es = Elasticsearch(
             [{'host': host, 'port': port}],
@@ -83,7 +83,7 @@ def es_connection(host=config.elastic_host1,port=config.elastic_port1,name=confi
         if not es.ping():
             raise ValueError("Connection failed")
         else:
-            print('Connection OK')
+            #print('Connection OK')
             return es
     except Exception as e: 
         print('Elasticsearch error:',e)
@@ -106,7 +106,7 @@ def create_random_snp_data():
         }
     }
     print(filterData)
-    res = es_query(bodyText)
+    t,count,res = es_query(bodyText,host=es_hosts[0])
     snpList=[]
     #print(res['hits']['total']['value'],'SNPs')
     for res in res['hits']['hits']:
@@ -139,19 +139,47 @@ def create_random_gwas_data():
 
 index_name='ukb-a,ukb-b,ukb-d,ieu-a,ebi-a,eqtl-a,met-a,met-b,met-c,prot-a,prot-b,ubm-a'
 
-def es_query(bodyText,index=index_name):
+def es_query(bodyText,host,index=index_name):
+    es = es_connection(host['host'],host['port'],host['name'])
+
     print('index = ',index)
     #need to create separate connection each time to avoid issues with mulitprocessing
-    t = time.process_time()
-    es = es_connection()
+    t1 = time.time()
     #print('es connection',time.process_time() - t)
     res=es.search(
         request_timeout=60,
         index=index,
         body=bodyText
         )
-    #print(res)
-    return res
+    t2 = time.time()
+    t = t2-t1
+    # get total
+    total = 0
+    #print(res['responses'])
+    # v6 and v7 ES return total in different format
+    try:
+        total += int(res['hits']['total']['value'])
+    except:
+        total += int(res['hits']['total'])
+    return t, total, res 
+
+def es_mquery(host,body):
+    es = es_connection(host['host'],host['port'],host['name'])
+    t1 = time.time()
+    res = es.msearch(body = body)
+    t2 = time.time()
+    t = t2-t1
+
+    # get total
+    total = 0
+    for r in res['responses']:
+        #print(res['responses'])
+        # v6 and v7 ES return total in different format
+        try:
+            total += int(r['hits']['total']['value'])
+        except:
+            total += int(r['hits']['total'])
+    return t, total
 
 def et1(host):
     #replicate API and run each batch separately - seems to be slower than running against all indexes at once!!!
@@ -169,7 +197,7 @@ def et1(host):
     #batches = list(set(batches))
     for b in batches:
         req_head = {'index': b}
-        print('Running batch',b,batches[b])
+        #print('Running batch',b,batches[b])
         filterData=[
                 {"terms":{"gwas_id":batches[b]}},
                 {"terms":{"snp_id":q1_snpList}}
@@ -184,27 +212,56 @@ def et1(host):
         }
         request.extend([req_head, bodyText])
     es = es_connection(host['host'],host['port'],host['name'])
-    print(request)
-    t1 = time.time()
-    res = es.msearch(body = request)
-    t2 = time.time()
-    t = t2-t1
-    #print(res)
-    for r in res['responses']:
-        #print(res['responses'])
-        try:
-            total += int(r['hits']['total']['value'])
-        except:
-            total += int(r['hits']['total'])
-    #todo filter out results and match to index batches...
-    print('e1m total',host['host'],total)
+    #print(request)
+    t, total = es_mquery(host,request)
     return t,total
 
+def et2(host):
+    filterData=[
+			{"terms":{"snp_id":q2_snpList}}
+			]
+    #print(filterData)
+    bodyText={
+        "size":return_limit,
+        "query": {
+            "bool" : {
+                "filter" : filterData
+            }
+        },
+        "post_filter": {
+            "range": {"p": {"lt": pval_filter}}
+        }
+    }
+    es = es_connection(host['host'],host['port'],host['name'])
+    t, total, res = es_query(host=host,bodyText=bodyText)
+    return t,total
+
+def et3(host):
+    filterData=[
+			{"terms":{"chr":[q3_chr]}},
+			{"range": {'position': {'gte': q3_start, 'lte': q3_end}}}
+			]
+    bodyText={
+        "size":return_limit,
+        "query": {
+            "bool" : {
+                "filter" : filterData
+            }
+        }
+    }
+    #print(filterData)
+    es = es_connection(host['host'],host['port'],host['name'])
+    t, total, res = es_query(host=host,bodyText=bodyText)
+    return t,total
 
 def run_tests(logger,name=0,db_type='',host=''):
     if db_type == 'es':
         t,c = et1(host)
-        logger.info(f"h:{host['name']}:{name}:time:{t}:count{c}")
+        logger.info(f"h:{host['name']}:et1-{name}:time:{t}:count{c}")
+        t,c = et2(host)
+        logger.info(f"h:{host['name']}:et2-{name}:time:{t}:count{c}")
+        t,c = et3(host)
+        logger.info(f"h:{host['name']}:et3-{name}:time:{t}:count{c}")
     else:
         exit()
 
@@ -212,12 +269,26 @@ def single():
     print('Doing single proc tests...')
     for i in range(0,run_num):
         print('Single',i)
+
+        # q1
         global q1_gwasList, q1_snpList, q2_snpList, q3_chr, q3_start, q3_end
         q1_gwasList = random.sample(gwas_ids, gwas_list_length)
         q1_snpList=random.sample(random_snps, snp_list_length)
+
+        # q2
+        q2_snpList=random.sample(random_snps, 1)
+
+        # q3 
+        q3_chr=random.randrange(1, 22)
+        q3_start=random.randrange(10000000, 20000000)
+        q3_end=q3_start+range_size
+
         for h in es_hosts:
             #run_tests(logger=logger1,db_type='oa')
             run_tests(logger=logger1,name=f's{run_num}',db_type='es',host=h)
+
+
+
 
 def multi(proc_num):
     print('Doing multiproc tests...')
@@ -242,7 +313,7 @@ def basic_test():
     single()
 
     #run mutliprocessing tests
-    multi(run_num)
+    #multi(run_num)
     
     #plot things
     #plot_basic_times(main_log)
