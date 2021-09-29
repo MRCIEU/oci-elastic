@@ -1,7 +1,7 @@
 resource "oci_core_instance" "BastionHost" {
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "BastionHost"
+  display_name        = "BastionHostv3"
   shape               = "${var.BastionShape}"
 
   create_vnic_details {
@@ -11,7 +11,7 @@ resource "oci_core_instance" "BastionHost" {
 
   metadata {
     ssh_authorized_keys = "${var.ssh_public_key}"
-	ssh_private_key     = "${var.ssh_private_key}"
+	  ssh_private_key     = "${var.ssh_private_key}"
     user_data           = "${base64encode(file(var.BastionBootStrap))}"
   }
 
@@ -29,7 +29,7 @@ resource "oci_core_instance" "ESMasterNode" {
   count="${var.count}"
   availability_domain = "${lookup(data.oci_identity_availability_domains.ADs.availability_domains[1],"name")}"
   compartment_id      = "${var.compartment_ocid}"
-  display_name        = "ESMasterNode${count.index}"
+  display_name        = "ESMasterNodev3${count.index}"
   shape               = "${var.MasterNodeShape}"
   depends_on          = ["oci_core_instance.BastionHost"]
 
@@ -52,6 +52,11 @@ resource "oci_core_instance" "ESMasterNode" {
   timeouts {
    create = "${var.create_timeout}"
    }
+
+ # provisioner "file" {
+ #   source      = "oci/"
+ #   destination = "/home/opc"
+ # }
 }
 
 resource "null_resource" "mount_fss_on_Bastian" {
@@ -75,6 +80,8 @@ resource "null_resource" "mount_fss_on_Bastian" {
 	  "sudo chmod 777 /mnt/myfsspaths/fs1/path1"
     ]
   }
+
+
 }
 
 #https://github.com/terraform-providers/terraform-provider-oci/issues/499

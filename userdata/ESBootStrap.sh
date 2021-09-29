@@ -2,13 +2,17 @@
 
 echo 'Running ESBootStrap.sh' >> /tmp/oci.log
 
+nodeprefix="esmasternodev3"
+VM_COUNT=10
+
+sleep 5m
+
 ##ES Master/Data Nodes boot strap
 #make array of ES Nodes
-VM_COUNT=10
 min_nodes=$((($VM_COUNT/2)+1))
 hostArray=()
 for ((i=0; i<$VM_COUNT; i++)); do
-	esmasternode=`host esmasternode$i.privad1|awk '{print $4}'`
+	esmasternode=`host ${nodeprefix}${i}.privad1|awk '{print $4}'`
 	echo $esmasternode >> /tmp/oci.log;
 	hostArray+=( $esmasternode );
 done
@@ -78,8 +82,8 @@ mkdir -p $nfs
 #chown elasticsearch $nfs/snapshots
 
 yum install -y java
-yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.5.3.rpm
-yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-6.5.3-x86_64.rpm
+yum install -y https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.13.4-x86_64.rpm
+yum install -y https://artifacts.elastic.co/downloads/kibana/kibana-7.13.4-x86_64.rpm
 mkdir /etc/systemd/system/elasticsearch.service.d
 echo "[Service]" >>/etc/systemd/system/elasticsearch.service.d/override.conf
 echo "LimitMEMLOCK=infinity" >>/etc/systemd/system/elasticsearch.service.d/override.conf
@@ -99,13 +103,15 @@ echo "path.repo: ['"$nfs"']" >>/etc/elasticsearch/elasticsearch.yml
 echo "discovery.zen.minimum_master_nodes: $min_nodes" >>/etc/elasticsearch/elasticsearch.yml
 echo "cluster.routing.allocation.awareness.attributes: privad" >>/etc/elasticsearch/elasticsearch.yml
 echo "node.attr.privad: $subnetID" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.master: true" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.data: true" >>/etc/elasticsearch/elasticsearch.yml
-echo "node.ingest: true" >>/etc/elasticsearch/elasticsearch.yml
+echo "node.roles: [ data, master ]" >>/etc/elasticsearch/elasticsearch.yml
+echo "cluster.initial_master_nodes:"  >>/etc/elasticsearch/elasticsearch.yml
+for ((i=0; i<$VM_COUNT; i++)); do
+	echo "  - ${nodeprefix}${i}"  >>/etc/elasticsearch/elasticsearch.yml
+done
 echo "bootstrap.memory_lock: true" >>/etc/elasticsearch/elasticsearch.yml
 mv /etc/kibana/kibana.yml /etc/kibana/kibana.yml.original
 echo "server.host: $local_ip" >>/etc/kibana/kibana.yml
-echo "elasticsearch.url: "http://$local_ip:9200"" >>/etc/kibana/kibana.yml
+echo "elasticsearch.hosts: "http://$local_ip:9200"" >>/etc/kibana/kibana.yml
 chmod 660 /etc/elasticsearch/elasticsearch.yml
 chown root:elasticsearch /etc/elasticsearch/elasticsearch.yml
 systemctl daemon-reload
@@ -120,22 +126,11 @@ firewall-offline-cmd --add-port=22/tcp
 systemctl restart firewalld
 }
 
-## Select the node as Master/Data and runs relevant function.
-#for i in "${hostArray[@]}"; do
-#	if [ "$i" == ${HOSTNAME} ]; then
-#		echo "found ${HOSTNAME}";
 MasterNodeFunc
-#	fi;
-#done
 
-#case ${HOSTNAME} in
-#     esmasternode1|esmasternode2|esmasternode3)
-#           echo "Running Master Node Function"
-#           MasterNodeFunc
-#           ;;
-#    esdatanode1|esdatanode2|esdatanode3|esdatanode4)
-#           echo "Running Data Node Function"
-#           DataNodeFunc
-#           ;;
-#       *)
-#esac
+# Add the oci command line client
+yum install -y python36-oci-cli
+mkdir .oci
+#cp oci_api_key* oci/
+#cp config .oci/
+#chmod 700 .oci oci-api-*

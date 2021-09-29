@@ -52,7 +52,7 @@ resource "oci_core_security_list" "LBSecList" {
     }
 
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "137.222.4.102/32"
   },
     {
       tcp_options {
@@ -61,7 +61,7 @@ resource "oci_core_security_list" "LBSecList" {
       }
 
       protocol = "6"
-      source   = "0.0.0.0/0"
+      source   = "137.222.4.102/32"
     },
   ]
 }
@@ -140,7 +140,7 @@ resource "oci_core_security_list" "BastionSecList" {
   {
     protocol = "all"
     source = "${var.VCN-CIDR}"
-   },
+   }
   ]
 }
 
@@ -228,7 +228,6 @@ resource "oci_core_virtual_network" "my_vcn" {
   dns_label      = "myvcn"
   compartment_id = "${var.compartment_ocid}"
   display_name   = "myvcn"
-  dns_label      = "myvcn"
 }
 
 resource "oci_core_internet_gateway" "my_internet_gateway" {

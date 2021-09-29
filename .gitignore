@@ -2,3 +2,4 @@ env-vars_local.sh
 .terraform
 .errors
 *tfstate*
+oci/
