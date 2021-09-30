@@ -7,6 +7,7 @@ import random
 import logging
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import requests
 import re
 from elasticsearch import Elasticsearch
@@ -38,12 +39,12 @@ logger2 = setup_logger(name='m', log_file=main_log)
 
 #globals
 repeat=1
-run_num=5
+run_num=100
 gwas_list_length=2
 snp_list_length=100
 pval_filter=1e-2
 #range_size=1000000
-range_size=1000
+range_size=100
 return_limit=100000
 random_snps=[]
 multi_range = [1,2,5,50]
@@ -137,7 +138,7 @@ def create_random_gwas_data():
     print(len(gwas_ids),'OpenGWAS IDs')
     return gwas_ids
 
-index_name='ukb-a,ukb-b,ukb-d,ieu-a,ebi-a,eqtl-a,met-a,met-b,met-c,prot-a,prot-b,ubm-a'
+index_name='ukb-a,ukb-b,ukb-d,ieu-a,ebi-a,eqtl-a,met-a,met-b,met-c,prot-a,prot-b,ubm-a,finn-a'
 
 def es_query(bodyText,host,index=index_name):
     es = es_connection(host['host'],host['port'],host['name'])
@@ -266,11 +267,11 @@ def et3(host):
 def run_tests(logger,name=0,db_type='',host=''):
     if db_type == 'es':
         t,c = et1(host)
-        logger.info(f"h:{host['name']}:et1-{name}:time:{t}:count{c}")
+        logger.info(f"{host['name']} et1 {name} {t} {c}")
         t,c = et2(host)
-        logger.info(f"h:{host['name']}:et2-{name}:time:{t}:count{c}")
+        logger.info(f"{host['name']} et2 {name} {t} {c}")
         t,c = et3(host)
-        logger.info(f"h:{host['name']}:et3-{name}:time:{t}:count{c}")
+        logger.info(f"{host['name']} et3 {name} {t} {c}")
     else:
         exit()
 
@@ -317,6 +318,13 @@ def multi(proc_num):
         for p in proc:
             p.join()
 
+def read_log(log_file):
+    df = pd.read_csv(log_file,sep=' ',names=['data','time','sm','version','test','run_num','run_time','count'])
+    df = df.sort_values(by=['test','run_num','version'])
+    print(df)
+    g = df.groupby(['test','version']).mean()
+    print(g)
+
 def basic_test():
     #run single tests
     single()
@@ -324,15 +332,10 @@ def basic_test():
     #run mutliprocessing tests
     #multi(run_num)
     
-    #plot things
-    #plot_basic_times(main_log)
 
 def multi_test():
     for i in multi_range:
         multi(i)
-
-    #plot things
-    #plot_multi_times(main_log)
 
 if __name__ == "__main__":
 
@@ -348,4 +351,5 @@ if __name__ == "__main__":
     basic_test()
     #multi_test()
 
+    read_log(main_log)
 
