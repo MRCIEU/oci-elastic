@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 import requests
 import re
+import hashlib
+
 from elasticsearch import Elasticsearch
 from multiprocessing import Process
 
@@ -39,13 +41,15 @@ logger2 = setup_logger(name='m', log_file=main_log)
 
 #globals
 repeat=1
-run_num=100
-gwas_list_length=2
-snp_list_length=100
-pval_filter=1e-2
-#range_size=1000000
-range_size=100
+run_num=10
 return_limit=100000
+
+# gwas/snp/range limits
+gwas_list_length=2
+snp_list_length=1
+pval_filter=1e-2
+range_size=100
+
 random_snps=[]
 multi_range = [1,2,5,50]
 
@@ -107,7 +111,7 @@ def create_random_snp_data():
         }
     }
     print(filterData)
-    t,count,res = es_query(bodyText,host=es_hosts[0])
+    t,count,res,md5 = es_query(bodyText,host=es_hosts[0])
     snpList=[]
     #print(res['hits']['total']['value'],'SNPs')
     for res in res['hits']['hits']:
@@ -165,7 +169,8 @@ def es_query(bodyText,host,index=index_name):
     #    total += int(res['hits']['total']['value'])
     #except:
     #    total += int(res['hits']['total'])
-    return t, total, res 
+    md5 = hashlib.md5(str(res['hits']['hits']).encode('utf-8')).hexdigest()
+    return t, total, res, md5
 
 def es_mquery(host,body):
     es = es_connection(host['host'],host['port'],host['name'])
@@ -176,17 +181,21 @@ def es_mquery(host,body):
 
     # get total
     total = 0
+    hits = []
     for r in res['responses']:
         #print(res['responses'])
         # v6 and v7 ES return total in different format
         # actually, total is not always reliable, best to actually count
         # https://www.elastic.co/guide/en/elasticsearch/reference/master/search-your-data.html#track-total-hits
         total += len(r['hits']['hits'])
+        hits.append(r['hits']['hits'])
         #try:
         #    total += int(r['hits']['total']['value'])
         #except:
         #   total += int(r['hits']['total'])
-    return t, total
+    print(hits)
+    md5 = hashlib.md5(str(hits).encode('utf-8')).hexdigest()
+    return t, total, res, md5
 
 def et1(host):
     #replicate API and run each batch separately - seems to be slower than running against all indexes at once!!!
@@ -220,8 +229,8 @@ def et1(host):
         request.extend([req_head, bodyText])
     es = es_connection(host['host'],host['port'],host['name'])
     #print(request)
-    t, total = es_mquery(host,request)
-    return t,total
+    t, total, res, md5 = es_mquery(host,request)
+    return t,total, md5
 
 def et2(host):
     filterData=[
@@ -240,8 +249,8 @@ def et2(host):
         }
     }
     es = es_connection(host['host'],host['port'],host['name'])
-    t, total, res = es_query(host=host,bodyText=bodyText)
-    return t,total
+    t, total, res, md5 = es_query(host=host,bodyText=bodyText)
+    return t,total, md5
 
 def et3(host):
     filterData=[
@@ -259,19 +268,19 @@ def et3(host):
     }
     print(filterData)
     es = es_connection(host['host'],host['port'],host['name'])
-    t, total, res = es_query(host=host,bodyText=bodyText)
+    t, total, res, md5 = es_query(host=host,bodyText=bodyText)
     # check if res actually contains all hits
     print('et3',total,len(res['hits']['hits']))
-    return t,total
+    return t,total,md5
 
 def run_tests(logger,name=0,db_type='',host=''):
     if db_type == 'es':
-        t,c = et1(host)
-        logger.info(f"{host['name']} et1 {name} {t} {c}")
-        t,c = et2(host)
-        logger.info(f"{host['name']} et2 {name} {t} {c}")
-        t,c = et3(host)
-        logger.info(f"{host['name']} et3 {name} {t} {c}")
+        t,c,md5 = et1(host)
+        logger.info(f"{host['name']} et1 {name} {t} {c} {md5}")
+        t,c,md5 = et2(host)
+        logger.info(f"{host['name']} et2 {name} {t} {c} {md5}")
+        t,c,md5 = et3(host)
+        logger.info(f"{host['name']} et3 {name} {t} {c} {md5}")
     else:
         exit()
 
@@ -319,7 +328,7 @@ def multi(proc_num):
             p.join()
 
 def read_log(log_file):
-    df = pd.read_csv(log_file,sep=' ',names=['data','time','sm','version','test','run_num','run_time','count'])
+    df = pd.read_csv(log_file,sep=' ',names=['data','time','sm','version','test','run_num','run_time','count','md5'])
     df = df.sort_values(by=['test','run_num','version'])
     print(df)
     g = df.groupby(['test','version']).mean()
